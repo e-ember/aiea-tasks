@@ -1,4 +1,3 @@
-#import libraries
 # import libraries
 import gymnasium as gym
 from gymnasium.wrappers import ResizeObservation
