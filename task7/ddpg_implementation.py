@@ -1,12 +1,11 @@
+#import libraries
 # import libraries
 import gymnasium as gym
-from gymnasium.wrappers import GrayscaleObservation, ResizeObservation
+from gymnasium.wrappers import ResizeObservation
 from stable_baselines3 import DDPG
 from stable_baselines3.common.vec_env import DummyVecEnv, VecTransposeImage, VecFrameStack
 from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 import numpy as np
-
-print(gym.make("CarRacing-v3").spec.max_episode_steps)
 
 # create gym environment for DDPG algorithm
 def make_env():
@@ -20,10 +19,12 @@ def make_env():
     env = gym.wrappers.RecordEpisodeStatistics(env)
     return env
 
+# Stack every three frames to increase model accuracy. Single frames aren't enough.
 env = DummyVecEnv([make_env])
 env = VecTransposeImage(env)       
 env = VecFrameStack(env, n_stack=3)   
 
+# Add OrnsteinUhlenbeck noise, as per the DDPG paper, to increase model exploration
 noise = OrnsteinUhlenbeckActionNoise(
     mean = np.zeros(3),
     sigma=0.2 * np.ones(3),
@@ -47,4 +48,4 @@ model.learn(total_timesteps=500000, log_interval=4)
 model.save("ddpg_car_racing")
 
 # Note: For few parts of the code, I worked with Claude to fully understand how to make the environment resizable, grayscale, and stack the frames. 
-# Made sure to understand what each function was doing before I implemented it, specifically for ResizeObservation() GrayscaleObservation(), and VecFrameStack().
+# Made sure to understand what each function was doing before I implemented it, specifically for ResizeObservation(), OrnsteinUhlenbeckActionNoise() and VecFrameStack().
