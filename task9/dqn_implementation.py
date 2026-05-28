@@ -18,6 +18,7 @@ def make_env():
     # this is to record reward and logs per episode
     env = gym.wrappers.RecordEpisodeStatistics(env)
 
+    # Create a Monitor for the environment
     os.makedirs("./logs/", exist_ok=True)
     env = Monitor(env, "./logs/dqn_data")
     return env
@@ -31,11 +32,13 @@ env = VecFrameStack(env, n_stack=4)
 # create the DQN model, and create logs for training
 model = DQN("CnnPolicy", env, verbose=1, buffer_size=10000, tensorboard_log="./dqn_logs/")
 
+# Configure the logger
 log_path = "./logs/dqn/"
 new_logger = configure(log_path, ["stdout", "csv", "tensorboard"])
 model.set_logger(new_logger)
 
 # train the model for 500,000 timesteps and log every 4 episodes
+# CHANGE TIMESTEPS HERE FOR LONGER TRAINING TIME (recommended 500K)
 model.learn(total_timesteps=10000, log_interval=4)
 
 # This is for running the model in the simulation and seeing how it performs.

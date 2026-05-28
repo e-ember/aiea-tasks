@@ -24,6 +24,7 @@ def make_env():
     # this is to record reward and logs per episode
     env = gym.wrappers.RecordEpisodeStatistics(env)
 
+    # Create a Monitor for the environment
     os.makedirs("./logs/", exist_ok=True)
     env = Monitor(env, "./logs/ddpg_data")
 
@@ -43,12 +44,13 @@ noise = OrnsteinUhlenbeckActionNoise(
 # create the DDPG model, and create logs for training
 model = DDPG("CnnPolicy", env, verbose=1, action_noise=noise, buffer_size=100000, batch_size=64, learning_rate=1e-4, gamma=0.99, tensorboard_log="./ddpg_logs/", tau=0.001)
 
-
+# Configure the logger
 log_path = "./logs/ddpg/"
 new_logger = configure(log_path, ["stdout", "csv", "tensorboard"])
 model.set_logger(new_logger)
 
 # train the model for 500,000 timesteps and log every 4 episodes
+# CHANGE TIMESTEPS HERE FOR LONGER TRAINING TIME (recommended 500K)
 model.learn(total_timesteps=10000, log_interval=4)
 
 # This is for running the model in the simulation and seeing how it performs.
