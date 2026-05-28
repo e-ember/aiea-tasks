@@ -3,6 +3,9 @@ import gymnasium as gym
 from gymnasium.wrappers import GrayscaleObservation, ResizeObservation
 from stable_baselines3 import DQN
 from stable_baselines3.common.vec_env import DummyVecEnv, VecTransposeImage, VecFrameStack
+import os
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.logger import configure
 
 # create gym environment for DQN algorithm
 def make_env():
@@ -27,8 +30,13 @@ env = VecFrameStack(env, n_stack=4)
 
 # create the DQN model, and create logs for training
 model = DQN("CnnPolicy", env, verbose=1, buffer_size=10000, tensorboard_log="./dqn_logs/")
+
+log_path = "./logs/dqn/"
+new_logger = configure(log_path, ["stdout", "csv", "tensorboard"])
+model.set_logger(new_logger)
+
 # train the model for 500,000 timesteps and log every 4 episodes
-model.learn(total_timesteps=500000, log_interval=4)
+model.learn(total_timesteps=10000, log_interval=4)
 
 # This is for running the model in the simulation and seeing how it performs.
 # vec_env = model.get_env()

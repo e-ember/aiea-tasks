@@ -5,6 +5,9 @@ from stable_baselines3 import DDPG
 from stable_baselines3.common.vec_env import DummyVecEnv, VecTransposeImage, VecFrameStack
 from stable_baselines3.common.noise import OrnsteinUhlenbeckActionNoise
 import numpy as np
+import os
+from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.logger import configure
 
 # create gym environment for DDPG algorithm
 def make_env():
@@ -23,6 +26,7 @@ def make_env():
 
     os.makedirs("./logs/", exist_ok=True)
     env = Monitor(env, "./logs/ddpg_data")
+
     return env
 
 env = DummyVecEnv([make_env])
@@ -38,8 +42,14 @@ noise = OrnsteinUhlenbeckActionNoise(
 
 # create the DDPG model, and create logs for training
 model = DDPG("CnnPolicy", env, verbose=1, action_noise=noise, buffer_size=100000, batch_size=64, learning_rate=1e-4, gamma=0.99, tensorboard_log="./ddpg_logs/", tau=0.001)
+
+
+log_path = "./logs/ddpg/"
+new_logger = configure(log_path, ["stdout", "csv", "tensorboard"])
+model.set_logger(new_logger)
+
 # train the model for 500,000 timesteps and log every 4 episodes
-model.learn(total_timesteps=500000, log_interval=4)
+model.learn(total_timesteps=10000, log_interval=4)
 
 # This is for running the model in the simulation and seeing how it performs.
 # vec_env = model.get_env()
