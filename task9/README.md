@@ -1,11 +1,16 @@
 ## benchmark.py
 This is a benchmark for the reward, loss, and episode length through RL algorithm simulations in the Car Racing Gym Environment.
-Use: python benchmark.py [MODEL_NAME1] [MODEL_NAME2] [MODEL_NAME#]
+
+Use: python benchmark.py [MODEL_NAME1] [MODEL_NAME2] ...
+
 Current MODEL_NAME options: DQN, DDPG
 
 Starting and ending simulation reward, loss, and episode length are outputted to the console.
+
 Monitor Data is saved to ./logs/ALG_NAME_data.monitor.csv (Reward and Episode Length)
+
 Logger Data is saved to ./logs/ALG_NAME/progress.csv (Actor/Critic Loss, etc.)
+
 Plots saved to ./logs/ALG_NAME_*.png
 
 ## dqn_implementation.py
