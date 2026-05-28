@@ -1,6 +1,6 @@
 ## benchmark.py
 This is a benchmark for the reward, loss, and episode length through RL algorithm simulations in the Car Racing Gym Environment.
-Use: python benchmark.py [MODEL_NAME1] [MODEL_NAME2] ...
+Use: python benchmark.py [MODEL_NAME1] [MODEL_NAME2] [MODEL_NAME#]
 Current MODEL_NAME options: DQN, DDPG
 
 Starting and ending simulation reward, loss, and episode length are outputted to the console.
